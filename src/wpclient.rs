@@ -16,7 +16,8 @@ impl WPClient {
         }
     }
     fn records_endpoint(&self, records: &str) -> String {
-        self.base_url.to_owned() + "/wp-json/wp/v2/" + records
+        let url = self.base_url.to_owned();
+        format!("{url}/wp-json/wp/v2/{records}")
     }
     pub fn get_records_text(&self) -> Result<String, reqwest::Error> {
         let mut text = String::new();
