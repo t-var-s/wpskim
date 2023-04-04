@@ -8,6 +8,7 @@ mod extract;
 use extract::Extract;
 mod files;
 mod test_data;
+mod tests;
 
 #[allow(unused_imports)]
 use crate::test_data::*;
@@ -44,24 +45,4 @@ fn main() {
         let email_list = extract.email_list();
         cli::pipe_list_out(email_list);
     }
-}
-
-#[test]
-fn test_extract() {
-    let extract = Extract::new(
-        String::from(JSON_TEXT),
-        String::from("https://wordpress.org"),
-    );
-    let url_list = extract.url_list();
-    let email_list = extract.email_list();
-    assert_eq!(
-        url_list,
-        [
-            "https://wp.me/P1OHUb-4pI",
-            "https://www.bluehost.com/wordpress-hosting",
-            "https://www.dreamhost.com/wordpress-hosting/",
-            "https://www.siteground.com/wordpress-hosting.htm",
-        ]
-    );
-    assert_eq!(email_list, ["hosting@wordpress.org"]);
 }
