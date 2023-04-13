@@ -1,14 +1,12 @@
 # wpskim
-A CLI tool that retrieves external links and e-mails from a WordPress site by gettings its pages and posts from its default REST API. 
-
-![wpkskim](https://user-images.githubusercontent.com/6660327/228938554-42b19b5e-8c4f-448c-8c2e-b99abbc49210.gif)
+A CLI tool that retrieves external links, e-mails and documents from a WordPress site by gettings its pages, posts and media from its default REST API. 
 
 
 ## Basic use example:
 
 `wpskim https://wordpress.org`
 
-Outputs an ordered list of links and e-mails found in all visible pages and posts of wordpress.org, excluding those links that refer to wordpress.org itself. This list can be piped into other shell commands.
+Outputs an ordered list of links, e-mails and documents found in all visible pages, posts and media of wordpress.org, excluding those links that refer to wordpress.org itself. This list can be piped into other shell commands.
 
 
 ## Examples for other options:
@@ -17,7 +15,7 @@ All options can be found by using `wpskim -h`
 
 You can list only links with `wpskim links -u https://wordpress.org`
 
-You can download a `pages.json` and `posts.json` file with `wpskim -d -u https://wordpress.org`
+You can download `pages.json`, `posts.json` and `documents.json` files with `wpskim -d -u https://wordpress.org`
 
 If you run `wpskim` in a folder that contains these files, it wll instead read from them instead of making the corresponding requests.  
 
