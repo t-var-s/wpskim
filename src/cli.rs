@@ -8,6 +8,7 @@ pub enum Output {
     All,
     Emails,
     Links,
+    Documents
 }
 
 #[derive(Parser, Debug)]

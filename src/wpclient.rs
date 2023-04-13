@@ -1,4 +1,5 @@
 use reqwest::blocking::Client;
+use serde_json::Value;
 
 use crate::files;
 
@@ -38,5 +39,49 @@ impl WPClient {
             }
         }
         return Ok(text);
+    }
+    fn get_documents_json(&self) -> String {
+        let documents_path = "documents.json";
+        let mut json = String::new();
+        let empty_json = String::from("[]");
+        match files::load_text(documents_path) {
+            Some(file_json) => {
+                json = file_json;
+            }
+            None => ()
+        };
+        if json.len() > 0{
+            return json;
+        }
+        let media_url = self.records_endpoint("media");
+        let documents_url = format!("{media_url}?media_type=application");
+        match self.client.get(documents_url).send(){
+            Ok(response) => {
+                match response.text(){ Ok(text) =>{ 
+                    json = text;
+                    if self.download_requests {
+                        files::save_text(documents_path, &json);
+                    }
+                }, Err(_) => json = empty_json, }
+            },
+            Err(_) => json = empty_json,
+        }
+        return json;
+    }
+    pub fn get_documents_list(&self) -> Result<Vec<String>, serde_json::Error> {
+        let mut url_list:Vec<String> = Vec::new();
+        let documents_json = self.get_documents_json();
+        let data:Value = serde_json::from_str(&documents_json)?;
+        if let Some(list) = data.as_array(){
+            for item in list{
+                if let Some(guid) = item["guid"].as_object(){
+                    if let Some(rendered) = guid["rendered"].as_str(){
+                        url_list.push(rendered.to_string())
+                    }
+                }
+            }
+        }
+        url_list.sort();
+        return Ok(url_list);
     }
 }

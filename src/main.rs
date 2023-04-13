@@ -2,6 +2,7 @@ use loading::Loading;
 use std::process::exit;
 
 mod cli;
+use cli::Output::*;
 mod wpclient;
 use wpclient::WPClient;
 mod extract;
@@ -20,7 +21,7 @@ fn main() {
     let wpjson = WPClient::new(base_url.clone(), download_requests);
     let mut _json_text = String::new();
     let loading = Loading::default();
-    loading.text("loading");
+    loading.text("loading    ");
     match wpjson.get_records_text() {
         Ok(o) => _json_text = o,
         Err(e) => {
@@ -37,12 +38,18 @@ fn main() {
     }
     loading.end();
     let extract = Extract::new(_json_text, base_url.clone());
-    if options.output != cli::Output::Emails {
+    if [Links, All].contains(&options.output) {
         let url_list = extract.url_list();
         cli::pipe_list_out(url_list);
     }
-    if options.output != cli::Output::Links {
+    if [Emails, All].contains(&options.output) {
         let email_list = extract.email_list();
         cli::pipe_list_out(email_list);
+    }
+    if [Documents, All].contains(&options.output) {
+        match wpjson.get_documents_list(){
+            Ok(documents_list) => cli::pipe_list_out(documents_list),
+            Err(_) => ()
+        }
     }
 }
