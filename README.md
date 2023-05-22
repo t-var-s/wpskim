@@ -20,6 +20,13 @@ You can download `pages.json`, `posts.json` and `documents.json` files with `wps
 If you run `wpskim` in a folder that contains these files, it wll instead read from them instead of making the corresponding requests.  
 
 
+## Released Builds
+
+```
+brew tap t-var-s/tap
+brew install wpskim
+```
+
 ## Learning Rust?
 
 It's an easy workflow if you want to build this tool for yourself. Get started by following [here](https://www.rust-lang.org/learn/get-started) the instructions to get rustup. This will install cargo in your system. Clone this repository and check that everything is working with `cargo build`, `cargo run https://wordpress.org` and `cargo test`. To build a binary you can use, the command is `cargo build --release` and you will find it in the `/target/release/` folder.
