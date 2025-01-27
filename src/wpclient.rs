@@ -18,7 +18,7 @@ impl WPClient {
     }
     fn records_endpoint(&self, records: &str) -> String {
         let url = self.base_url.to_owned();
-        format!("{url}/wp-json/wp/v2/{records}")
+        format!("{url}/wp-json/wp/v2/{records}?per_page=100")
     }
     pub fn get_records_text(&self) -> Result<String, reqwest::Error> {
         let mut text = String::new();
@@ -54,7 +54,7 @@ impl WPClient {
             return json;
         }
         let media_url = self.records_endpoint("media");
-        let documents_url = format!("{media_url}?media_type=application");
+        let documents_url = format!("{media_url}&media_type=application");
         match self.client.get(documents_url).send(){
             Ok(response) => {
                 match response.text(){ Ok(text) =>{ 
